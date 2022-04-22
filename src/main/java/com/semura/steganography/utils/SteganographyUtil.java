@@ -24,8 +24,13 @@ public class SteganographyUtil {
         return ImageIO.read(file);
     }
 
-    @SneakyThrows
+
     public static File integrateMessage(File file, byte[] msg) {
+        return integrateMessage(file, msg, createEncryptedFileResult(file));
+    }
+
+    @SneakyThrows
+    public static File integrateMessage(File file, byte[] msg, File out) {
         msg = Arrays.copyOf(msg, msg.length + 1);
         msg[msg.length - 1] = 10;
         BufferedImage image = reader(file);
@@ -42,9 +47,8 @@ public class SteganographyUtil {
                     throw new IllegalStateException("End of image");
             }
         }
-        File fileResult = createEncryptedFileResult(file);
-        ImageIO.write(image, "PNG", fileResult);
-        return fileResult;
+        ImageIO.write(image, "PNG", out);
+        return out;
     }
 
     @SneakyThrows
